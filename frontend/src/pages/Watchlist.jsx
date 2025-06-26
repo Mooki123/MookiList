@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import { useAuth } from "../context/AuthContext";
 import SearchAnime from "../components/SearchAnime";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Watchlist() {
@@ -14,6 +14,7 @@ function Watchlist() {
   const [showSearch, setShowSearch] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("title");
+  const navigate = useNavigate();
 
   const fetchWatchlist = async () => {
     try {
@@ -357,7 +358,22 @@ function Watchlist() {
                 {filteredAndSortedAnime.map((anime) => (
                   <div
                     key={anime._id}
-                    className="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
+                    className="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
+                    onClick={(e) => {
+                      // Only navigate if the click is not on a button
+                      if (!e.target.closest("button")) {
+                        console.log("Anime data:", anime); // Debug log
+                        if (anime.animeId) {
+                          navigate(`/anime/${anime.animeId}`);
+                        } else {
+                          console.error(
+                            "animeId not found in anime data:",
+                            anime
+                          );
+                          toast.error("Unable to navigate to anime details");
+                        }
+                      }
+                    }}
                   >
                     {/* Background Image */}
                     <div
