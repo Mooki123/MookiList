@@ -234,9 +234,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Lakshay Saharan- [LinkedIn](https://www.linkedin.com/in/lakshay-saharan-30b904287/) - lakshaysaharan769@gmail.com
 
-Project Link: [https://github.com/yourusername/anime-watchlist](https://github.com/yourusername/anime-watchlist)
+My github: https://github.com/Mooki123
 
 ---
 
