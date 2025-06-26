@@ -25,9 +25,9 @@ function AnimeDetails() {
   const fetchAnimeDetails = async () => {
     try {
       setLoading(true);
-      console.log('Fetching anime details for ID:', id); // Debug log
+      console.log("Fetching anime details for ID:", id); // Debug log
       const data = await getAnimeDetails(id);
-      console.log('Anime details received:', data); // Debug log
+      console.log("Anime details received:", data); // Debug log
       setAnime(data);
     } catch (error) {
       console.error("Failed to fetch anime details:", error);

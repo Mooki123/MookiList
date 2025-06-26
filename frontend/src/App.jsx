@@ -9,6 +9,7 @@ import AnimeDetails from "./pages/AnimeDetails";
 import Recommendations from "./pages/Recommendations";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./context/AuthContext";
+import Footer from "./components/Footer";
 
 function App() {
   const { token } = useAuth();
@@ -39,6 +40,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </Router>
   );
 }
