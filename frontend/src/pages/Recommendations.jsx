@@ -42,16 +42,16 @@ function Recommendations() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 pt-20 px-6">
+      <div className="min-h-screen bg-[#121212] pt-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-400 mx-auto mb-4"></div>
-            <h2 className="text-2xl font-bold text-white mb-2">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#FFC107] mx-auto mb-4"></div>
+            <h2 className="text-2xl font-bold text-[#E0E0E0] mb-2">
               {isAIGenerated
                 ? "AI is analyzing your taste..."
                 : "Analyzing your taste..."}
             </h2>
-            <p className="text-gray-400">
+            <p className="text-[#90A4AE]">
               {isAIGenerated
                 ? "Our AI is crafting personalized recommendations just for you"
                 : "Preparing personalized recommendations based on your watchlist"}
@@ -64,12 +64,12 @@ function Recommendations() {
 
   if (recommendations.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-900 pt-20 px-6">
+      <div className="min-h-screen bg-[#121212] pt-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center py-20">
-            <div className="w-24 h-24 mx-auto mb-6 bg-gray-700/50 rounded-full flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto mb-6 bg-[#1E1E1E]/50 rounded-full flex items-center justify-center">
               <svg
-                className="w-12 h-12 text-gray-400"
+                className="w-12 h-12 text-[#90A4AE]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -82,16 +82,16 @@ function Recommendations() {
                 />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-3xl font-bold text-[#E0E0E0] mb-4">
               No Recommendations Yet
             </h2>
-            <p className="text-gray-400 mb-8 max-w-md mx-auto">
+            <p className="text-[#90A4AE] mb-8 max-w-md mx-auto">
               Add some anime to your watchlist to get personalized AI
               recommendations based on your taste!
             </p>
             <Link
               to="/"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] hover:from-[#FFD600] hover:to-[#FFA000] text-[#1E1E1E] font-extrabold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -115,21 +115,21 @@ function Recommendations() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 pt-20 px-6">
+    <div className="min-h-screen bg-[#121212] pt-20 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-[#FFC107] mb-4">
             AI-Powered Recommendations
           </h1>
-          <p className="text-gray-400 text-lg mb-6">
+          <p className="text-[#90A4AE] text-lg mb-6">
             Personalized anime suggestions based on your watchlist
           </p>
 
           {/* AI Status Indicator */}
-          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 rounded-full mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#2979FF]/20 to-[#00BCD4]/20 border border-[#2979FF]/30 rounded-full mb-6">
             <svg
-              className="w-5 h-5 text-purple-400 mr-2"
+              className="w-5 h-5 text-[#2979FF] mr-2"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -141,47 +141,47 @@ function Recommendations() {
                 d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
               />
             </svg>
-            <span className="text-purple-300 font-medium">
+            <span className="text-[#2979FF] font-medium">
               {isAIGenerated ? "AI Generated" : "Curated Recommendations"}
             </span>
           </div>
 
           {/* User Preferences Analysis */}
           {userPreferences && (
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 mb-8">
-              <h3 className="text-xl font-semibold text-white mb-4">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#E0E0E0]/10 rounded-xl p-6 mb-8">
+              <h3 className="text-xl font-semibold text-[#E0E0E0] mb-4">
                 Your Anime Profile
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">
+                  <div className="text-2xl font-bold text-[#FFC107]">
                     {userPreferences.totalAnime}
                   </div>
-                  <div className="text-sm text-gray-400">Total Anime</div>
+                  <div className="text-sm text-[#90A4AE]">Total Anime</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-400">
+                  <div className="text-2xl font-bold text-[#66BB6A]">
                     {userPreferences.completedCount}
                   </div>
-                  <div className="text-sm text-gray-400">Completed</div>
+                  <div className="text-sm text-[#90A4AE]">Completed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">
+                  <div className="text-2xl font-bold text-[#2979FF]">
                     {userPreferences.watchingCount}
                   </div>
-                  <div className="text-sm text-gray-400">Watching</div>
+                  <div className="text-sm text-[#90A4AE]">Watching</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-400">
+                  <div className="text-2xl font-bold text-[#FFD600]">
                     {userPreferences.planToWatchCount}
                   </div>
-                  <div className="text-sm text-gray-400">Plan to Watch</div>
+                  <div className="text-sm text-[#90A4AE]">Plan to Watch</div>
                 </div>
               </div>
               <div className="mt-4 text-center">
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-[#90A4AE]">
                   Favorite status:{" "}
-                  <span className="text-purple-400 font-medium capitalize">
+                  <span className="text-[#2979FF] font-medium capitalize">
                     {userPreferences.favoriteStatus}
                   </span>
                 </span>
@@ -191,7 +191,7 @@ function Recommendations() {
 
           <button
             onClick={fetchRecommendations}
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] hover:from-[#FFD600] hover:to-[#FFA000] text-[#1E1E1E] font-extrabold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -203,7 +203,7 @@ function Recommendations() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
               />
             </svg>
             Get New Recommendations

@@ -15,8 +15,8 @@ function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-lg z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    <nav className="fixed top-0 left-0 w-full bg-[#181A20]/95 text-[#E0E0E0] shadow-xl border-b border-[#FFC107]/40 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
         {/* Left Section */}
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2">
@@ -25,7 +25,7 @@ function Navbar() {
               alt="Logo"
               className="h-8 w-8 object-contain rounded-sm"
             />
-            <span className="text-purple-500 text-2xl font-extrabold tracking-wide hover:text-purple-400 transition">
+            <span className="text-[#FFC107] text-2xl font-extrabold tracking-wide hover:text-[#FFD600] transition">
               MookiList
             </span>
           </Link>
@@ -33,8 +33,8 @@ function Navbar() {
           <Link
             to="/"
             className={`ml-6 text-lg ${
-              isActive("/") ? "text-white" : "text-purple-300"
-            } hover:text-white transition`}
+              isActive("/") ? "text-[#E0E0E0]" : "text-[#90A4AE]"
+            } hover:text-[#FFC107] transition`}
           >
             Watchlist
           </Link>
@@ -42,8 +42,8 @@ function Navbar() {
           <Link
             to="/search"
             className={`text-lg ${
-              isActive("/search") ? "text-white" : "text-purple-300"
-            } hover:text-white transition`}
+              isActive("/search") ? "text-[#E0E0E0]" : "text-[#90A4AE]"
+            } hover:text-[#FFC107] transition`}
           >
             Search
           </Link>
@@ -51,8 +51,8 @@ function Navbar() {
           <Link
             to="/recommendations"
             className={`text-lg ${
-              isActive("/recommendations") ? "text-white" : "text-purple-300"
-            } hover:text-white transition flex items-center gap-1`}
+              isActive("/recommendations") ? "text-[#E0E0E0]" : "text-[#90A4AE]"
+            } hover:text-[#FFC107] transition flex items-center gap-1`}
           >
             <svg
               className="w-4 h-4"
@@ -89,13 +89,13 @@ function Navbar() {
             <>
               <Link
                 to="/login"
-                className="text-purple-300 hover:text-white transition"
+                className="text-[#90A4AE] hover:text-[#FFC107] transition"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="text-purple-300 hover:text-white transition"
+                className="text-[#90A4AE] hover:text-[#FFC107] transition"
               >
                 Register
               </Link>

@@ -20,14 +20,14 @@ function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 pt-20">
+    <div className="min-h-screen bg-[#121212] pt-20">
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#E0E0E0] mb-4">
             Discover Anime
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-[#90A4AE] max-w-2xl mx-auto">
             Search through thousands of anime titles and add your favorites to
             your personal watchlist
           </p>
@@ -35,7 +35,7 @@ function SearchPage() {
 
         {/* Search Section */}
         <div className="max-w-6xl mx-auto">
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+          <div className="bg-[#1E1E1E]/50 backdrop-blur-sm rounded-2xl p-8 border border-[#E0E0E0]/10 shadow-2xl">
             {/* Search Filters */}
             <SearchFilters filters={filters} onChange={setFilters} />
 

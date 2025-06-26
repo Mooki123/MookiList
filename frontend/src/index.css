@@ -6,22 +6,32 @@
   font-weight: 700;
 }
 
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #1e1e1e;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8b5cf6;
+  background: #2979ff;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #7c3aed;
+  background: #00bcd4;
+}
+
+/* Subtle border utility */
+.subtle-border {
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 /* Line clamp utility */

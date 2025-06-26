@@ -66,15 +66,15 @@ function Watchlist() {
   const getStatusColor = (status) => {
     switch (status) {
       case "watching":
-        return "bg-blue-500";
+        return "bg-[#00BCD4]";
       case "completed":
-        return "bg-green-500";
+        return "bg-[#66BB6A]";
       case "dropped":
-        return "bg-red-500";
+        return "bg-[#9575CD]";
       case "plan to watch":
-        return "bg-yellow-500";
+        return "bg-[#7C4DFF]";
       default:
-        return "bg-gray-500";
+        return "bg-[#90A4AE]";
     }
   };
 
@@ -110,27 +110,27 @@ function Watchlist() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
+    <div className="min-h-screen bg-[#121212]">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2979FF]/20 to-[#7C4DFF]/20"></div>
         <div className="relative z-10 px-8 py-16 text-center">
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-[#FFC107] mb-6 mt-4 pt-4 drop-shadow-[0_2px_12px_rgba(255,193,7,0.25)]">
             My Watchlist
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-[#B0BEC5] max-w-2xl mx-auto mb-10">
             Track your anime journey and manage your personal collection
           </p>
           <div className="flex justify-center gap-4">
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="bg-gradient-to-r from-[#FFC107] to-[#FFD600] text-[#1E1E1E] px-8 py-3 rounded-xl font-extrabold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:from-[#FFD600] hover:to-[#FFA000]"
             >
               {showSearch ? "Hide Search" : "Add New Anime"}
             </button>
             <Link
               to="/recommendations"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] text-[#1E1E1E] rounded-xl font-extrabold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:from-[#FFD600] hover:to-[#FFA000]"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -148,7 +148,7 @@ function Watchlist() {
               AI Recommendations
             </Link>
           </div>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto mt-8 rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-[#90A4AE] to-[#B0BEC5] mx-auto mt-8 rounded-full"></div>
         </div>
       </div>
 
@@ -156,7 +156,7 @@ function Watchlist() {
       {showSearch && (
         <div className="px-8 pb-16">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm rounded-2xl p-8 border border-[#303030]/50 shadow-2xl">
               <SearchAnime onAdd={fetchWatchlist} />
             </div>
           </div>
@@ -168,14 +168,16 @@ function Watchlist() {
         <div className="max-w-7xl mx-auto">
           {loading ? (
             <div className="text-center py-16">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-400 mx-auto mb-4"></div>
-              <p className="text-xl text-gray-300">Loading your watchlist...</p>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#90A4AE] mx-auto mb-4"></div>
+              <p className="text-xl text-[#B0BEC5]">
+                Loading your watchlist...
+              </p>
             </div>
           ) : animeList.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-32 h-32 mx-auto mb-6 bg-gray-700/50 rounded-full flex items-center justify-center">
+              <div className="w-32 h-32 mx-auto mb-6 bg-[#303030]/50 rounded-full flex items-center justify-center">
                 <svg
-                  className="w-16 h-16 text-gray-400"
+                  className="w-16 h-16 text-[#90A4AE]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -188,22 +190,22 @@ function Watchlist() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold text-gray-300 mb-2">
+              <h3 className="text-2xl font-semibold text-[#B0BEC5] mb-2">
                 Your watchlist is empty
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-[#90A4AE] mb-6">
                 Start by adding some anime to your collection
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => setShowSearch(true)}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                  className="bg-gradient-to-r from-[#FFC107] to-[#FFD600] text-[#1E1E1E] px-6 py-3 rounded-lg font-extrabold transition-all duration-300 hover:from-[#FFD600] hover:to-[#FFA000]"
                 >
                   Add Your First Anime
                 </button>
                 <Link
                   to="/recommendations"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg font-medium transition-all duration-300"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] text-[#1E1E1E] rounded-lg font-extrabold transition-all duration-300 hover:from-[#FFD600] hover:to-[#FFA000]"
                 >
                   <svg
                     className="w-5 h-5 mr-2"
@@ -228,11 +230,11 @@ function Watchlist() {
               <div className="mb-8">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-6">
                   <div>
-                    <h2 className="text-3xl font-bold text-white mb-2">
+                    <h2 className="text-3xl font-bold text-[#B0BEC5] mb-4 mt-7">
                       Your Collection ({filteredAndSortedAnime.length} of{" "}
                       {animeList.length})
                     </h2>
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                    <div className="flex flex-wrap gap-4 text-sm text-[#90A4AE] mb-2">
                       <span>
                         {
                           animeList.filter((a) => a.status === "completed")
@@ -264,7 +266,7 @@ function Watchlist() {
                       <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="appearance-none bg-gray-800/50 border border-gray-600/50 text-white px-4 py-2 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
+                        className="appearance-none bg-[#1E1E1E]/50 border border-[#303030]/50 text-[#B0BEC5] px-4 py-2 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] focus:border-transparent backdrop-blur-sm"
                       >
                         <option value="all">
                           All Status ({statusCounts.all})
@@ -284,7 +286,7 @@ function Watchlist() {
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg
-                          className="w-4 h-4 text-gray-400"
+                          className="w-4 h-4 text-[#90A4AE]"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -304,7 +306,7 @@ function Watchlist() {
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
-                        className="appearance-none bg-gray-800/50 border border-gray-600/50 text-white px-4 py-2 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
+                        className="appearance-none bg-[#1E1E1E]/50 border border-[#303030]/50 text-[#B0BEC5] px-4 py-2 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] focus:border-transparent backdrop-blur-sm"
                       >
                         <option value="title">Sort by Title</option>
                         <option value="rating-high">
@@ -317,7 +319,7 @@ function Watchlist() {
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg
-                          className="w-4 h-4 text-gray-400"
+                          className="w-4 h-4 text-[#90A4AE]"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -342,8 +344,8 @@ function Watchlist() {
                       onClick={() => setStatusFilter(status)}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                         statusFilter === status
-                          ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
-                          : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50"
+                          ? "bg-gradient-to-r from-[#7C4DFF] to-[#2979FF] text-[#B0BEC5] shadow-lg"
+                          : "bg-[#303030]/50 text-[#90A4AE] hover:bg-[#404040]/50"
                       }`}
                     >
                       {status === "all" ? "All" : getStatusText(status)} (
@@ -358,7 +360,7 @@ function Watchlist() {
                 {filteredAndSortedAnime.map((anime) => (
                   <div
                     key={anime._id}
-                    className="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
+                    className="group relative bg-[#1E1E1E]/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-[#303030]/50 hover:border-[#7C4DFF]/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
                     onClick={(e) => {
                       if (
                         e.target.closest("button") ||
@@ -392,7 +394,7 @@ function Watchlist() {
                         />
                         <div className="absolute top-2 right-2">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(
+                            className={`px-2 py-1 rounded-full text-xs font-medium text-[#B0BEC5] ${getStatusColor(
                               anime.status
                             )}`}
                           >
@@ -403,19 +405,19 @@ function Watchlist() {
 
                       {/* Title and Score */}
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-300 transition-colors">
+                        <h3 className="text-lg font-bold text-[#B0BEC5] mb-2 line-clamp-2 group-hover:text-[#7C4DFF] transition-colors">
                           {anime.title}
                         </h3>
                         <div className="flex items-center gap-2 mb-4">
                           <div className="flex items-center gap-1">
                             <svg
-                              className="w-4 h-4 text-yellow-400"
+                              className="w-4 h-4 text-[#7C4DFF]"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
-                            <span className="text-gray-300">
+                            <span className="text-[#90A4AE]">
                               {anime.score}/10
                             </span>
                           </div>
@@ -433,7 +435,7 @@ function Watchlist() {
                                 status: e.target.value,
                               })
                             }
-                            className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full p-2 rounded-lg bg-[#303030] text-[#B0BEC5] border border-[#404040] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF]"
                           >
                             <option value="watching">Watching</option>
                             <option value="completed">Completed</option>
@@ -451,7 +453,7 @@ function Watchlist() {
                                 score: e.target.value,
                               })
                             }
-                            className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full p-2 rounded-lg bg-[#303030] text-[#B0BEC5] border border-[#404040] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF]"
                             placeholder="Score (0-10)"
                           />
                           <div className="flex gap-2">
@@ -460,7 +462,7 @@ function Watchlist() {
                                 e.stopPropagation();
                                 handleUpdate(anime._id);
                               }}
-                              className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                              className="flex-1 bg-[#7C4DFF] hover:bg-[#9575CD] text-[#B0BEC5] px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                             >
                               Save
                             </button>
@@ -469,7 +471,7 @@ function Watchlist() {
                                 e.stopPropagation();
                                 setEditingAnimeId(null);
                               }}
-                              className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                              className="flex-1 bg-[#303030] hover:bg-[#404040] text-[#B0BEC5] px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                             >
                               Cancel
                             </button>
@@ -486,7 +488,7 @@ function Watchlist() {
                                 score: anime.score,
                               });
                             }}
-                            className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105"
+                            className="flex-1 bg-white hover:bg-[#E0E0E0] text-black px-3 py-2 rounded-2xl text-sm font-bold transition-all duration-300 transform hover:scale-105"
                           >
                             Edit
                           </button>
@@ -495,7 +497,7 @@ function Watchlist() {
                               e.stopPropagation();
                               handleDelete(anime._id);
                             }}
-                            className="flex-1 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105"
+                            className="flex-1 bg-gradient-to-r from-[#EF5350] to-[#D32F2F] hover:from-[#D32F2F] hover:to-[#EF5350] text-white px-3 py-2 rounded-2xl text-sm font-medium transition-all duration-300 transform hover:scale-105"
                           >
                             Remove
                           </button>
@@ -509,9 +511,9 @@ function Watchlist() {
               {/* No Results Message */}
               {filteredAndSortedAnime.length === 0 && animeList.length > 0 && (
                 <div className="text-center py-16">
-                  <div className="w-24 h-24 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-[#303030]/50 rounded-full flex items-center justify-center">
                     <svg
-                      className="w-12 h-12 text-gray-400"
+                      className="w-12 h-12 text-[#90A4AE]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -524,15 +526,15 @@ function Watchlist() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-300 mb-2">
+                  <h3 className="text-xl font-semibold text-[#B0BEC5] mb-2">
                     No anime found
                   </h3>
-                  <p className="text-gray-400 mb-4">
+                  <p className="text-[#90A4AE] mb-4">
                     Try adjusting your filters
                   </p>
                   <button
                     onClick={() => setStatusFilter("all")}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                    className="bg-gradient-to-r from-[#7C4DFF] to-[#2979FF] text-[#B0BEC5] px-6 py-3 rounded-lg font-medium transition-all duration-300"
                   >
                     Show All Anime
                   </button>
@@ -544,8 +546,8 @@ function Watchlist() {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-20 left-10 w-32 h-32 bg-[#7C4DFF]/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#2979FF]/10 rounded-full blur-3xl"></div>
     </div>
   );
 }
