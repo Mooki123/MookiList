@@ -360,18 +360,18 @@ function Watchlist() {
                     key={anime._id}
                     className="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
                     onClick={(e) => {
-                      // Only navigate if the click is not on a button
-                      if (!e.target.closest("button")) {
-                        console.log("Anime data:", anime); // Debug log
-                        if (anime.animeId) {
-                          navigate(`/anime/${anime.animeId}`);
-                        } else {
-                          console.error(
-                            "animeId not found in anime data:",
-                            anime
-                          );
-                          toast.error("Unable to navigate to anime details");
-                        }
+                      if (
+                        e.target.closest("button") ||
+                        e.target.closest("select") ||
+                        e.target.closest("input") ||
+                        e.target.closest("textarea")
+                      ) {
+                        return;
+                      }
+                      if (anime.animeId) {
+                        navigate(`/anime/${anime.animeId}`);
+                      } else {
+                        toast.error("Unable to navigate to anime details");
                       }
                     }}
                   >
@@ -456,13 +456,19 @@ function Watchlist() {
                           />
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleUpdate(anime._id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUpdate(anime._id);
+                              }}
                               className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                             >
                               Save
                             </button>
                             <button
-                              onClick={() => setEditingAnimeId(null)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingAnimeId(null);
+                              }}
                               className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                             >
                               Cancel
@@ -472,7 +478,8 @@ function Watchlist() {
                       ) : (
                         <div className="flex gap-2">
                           <button
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setEditingAnimeId(anime._id);
                               setEditData({
                                 status: anime.status,
@@ -484,7 +491,10 @@ function Watchlist() {
                             Edit
                           </button>
                           <button
-                            onClick={() => handleDelete(anime._id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(anime._id);
+                            }}
                             className="flex-1 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105"
                           >
                             Remove
