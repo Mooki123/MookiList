@@ -1,5 +1,30 @@
 // components/SearchFilters.jsx
+import { useRef, useEffect } from "react";
+
 function SearchFilters({ filters, onChange }) {
+  const searchTimeoutRef = useRef(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleQueryChange = (value) => {
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Set new timeout for debouncing
+    searchTimeoutRef.current = setTimeout(() => {
+      onChange({ ...filters, query: value });
+    }, 300); // 300ms delay
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       {/* Search Input */}
@@ -23,8 +48,8 @@ function SearchFilters({ filters, onChange }) {
           className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
           type="text"
           placeholder="Search anime..."
-          value={filters.query}
-          onChange={(e) => onChange({ ...filters, query: e.target.value })}
+          defaultValue={filters.query}
+          onChange={(e) => handleQueryChange(e.target.value)}
         />
       </div>
 

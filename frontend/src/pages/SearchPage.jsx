@@ -19,6 +19,11 @@ function SearchPage() {
     return <Navigate to="/login" replace />;
   }
 
+  // Handle filter changes
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
   return (
     <div className="min-h-screen bg-[#121212] pt-20">
       <div className="container mx-auto px-6 py-8">
@@ -37,10 +42,10 @@ function SearchPage() {
         <div className="max-w-6xl mx-auto">
           <div className="bg-[#1E1E1E]/50 backdrop-blur-sm rounded-2xl p-8 border border-[#E0E0E0]/10 shadow-2xl">
             {/* Search Filters */}
-            <SearchFilters filters={filters} onChange={setFilters} />
+            <SearchFilters filters={filters} onChange={handleFilterChange} />
 
-            {/* Search Component */}
-            <SearchAnime onAdd={() => {}} />
+            {/* Search Component - Now integrated with filters */}
+            <SearchAnime onAdd={() => {}} filters={filters} useFilters={true} />
           </div>
         </div>
       </div>

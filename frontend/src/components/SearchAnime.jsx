@@ -1,32 +1,129 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axios from "../services/axios";
 import { useAuth } from "../context/AuthContext";
+import { advancedSearchAnime } from "../services/jikan";
 import toast from "react-hot-toast";
 
-function SearchAnime({ onAdd }) {
+function SearchAnime({ onAdd, filters = {}, useFilters = false }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState(null);
   const { token } = useAuth();
 
-  const searchAnime = async (q) => {
-    if (!q.trim()) {
-      setResults([]);
-      return;
-    }
+  // Refs for debouncing and request cancellation
+  const searchTimeoutRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
-    setIsSearching(true);
-    try {
-      const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}`);
-      const data = await res.json();
-      setResults((data.data || []).slice(0, 10)); // Only top 10
-    } catch (err) {
-      console.error("Failed to fetch from Jikan:", err);
-    } finally {
-      setIsSearching(false);
+  // Cleanup function for timeouts and requests
+  const cleanup = useCallback(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
-  };
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return cleanup;
+  }, [cleanup]);
+
+  const searchAnime = useCallback(
+    async (q, searchFilters = {}) => {
+      if (!q.trim()) {
+        setResults([]);
+        setError(null);
+        return;
+      }
+
+      // Cancel previous request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      // Create new abort controller
+      abortControllerRef.current = new AbortController();
+
+      setIsSearching(true);
+      setError(null);
+
+      try {
+        let searchResults;
+
+        if (
+          useFilters &&
+          Object.keys(searchFilters).some(
+            (key) => key !== "query" && searchFilters[key]
+          )
+        ) {
+          // Use advanced search with filters
+          searchResults = await advancedSearchAnime(q, searchFilters);
+        } else {
+          // Use simple search with popularity sorting
+          const params = {
+            q: q,
+            sfw: true,
+            order_by: "popularity",
+            sort: "desc",
+            limit: 20,
+          };
+          searchResults = await advancedSearchAnime(q, params);
+        }
+
+        // Sort results by popularity (score and members count)
+        const sortedResults = (searchResults || [])
+          .sort((a, b) => {
+            // Primary sort: by score (higher is better)
+            const scoreA = a.score || 0;
+            const scoreB = b.score || 0;
+            if (scoreA !== scoreB) {
+              return scoreB - scoreA;
+            }
+
+            // Secondary sort: by members count (higher is more popular)
+            const membersA = a.members || 0;
+            const membersB = b.members || 0;
+            return membersB - membersA;
+          })
+          .slice(0, 10); // Only top 10
+
+        setResults(sortedResults);
+      } catch (err) {
+        if (err.name === "AbortError") {
+          // Request was cancelled, don't show error
+          return;
+        }
+        console.error("Failed to fetch from Jikan:", err);
+        setError(err.message);
+        setResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [useFilters]
+  );
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    (q, searchFilters = {}) => {
+      cleanup();
+      searchTimeoutRef.current = setTimeout(() => {
+        searchAnime(q, searchFilters);
+      }, 300); // 300ms delay
+    },
+    [cleanup, searchAnime]
+  );
+
+  // Watch for filter changes if using filters
+  useEffect(() => {
+    if (useFilters && filters.query && filters.query !== query) {
+      setQuery(filters.query);
+      debouncedSearch(filters.query, filters);
+    }
+  }, [filters.query, useFilters, query, debouncedSearch]);
 
   const handleAdd = async (anime) => {
     try {
@@ -57,41 +154,76 @@ function SearchAnime({ onAdd }) {
     }
   };
 
+  const handleInputChange = useCallback(
+    (value) => {
+      setQuery(value);
+      if (useFilters) {
+        // Update filters if using filter mode
+        const newFilters = { ...filters, query: value };
+        debouncedSearch(value, newFilters);
+      } else {
+        debouncedSearch(value);
+      }
+    },
+    [useFilters, filters, debouncedSearch]
+  );
+
   return (
     <div className="space-y-8">
-      {/* Search Input */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <svg
-            className="h-6 w-6 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <input
-          type="text"
-          placeholder="Search for your favorite anime..."
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            searchAnime(e.target.value);
-          }}
-          className="w-full pl-12 pr-4 py-4 text-lg bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-        />
-        {isSearching && (
-          <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-400"></div>
+      {/* Search Input - Only show if not using filters */}
+      {!useFilters && (
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg
+              className="h-6 w-6 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
           </div>
-        )}
-      </div>
+          <input
+            type="text"
+            placeholder="Search for your favorite anime..."
+            value={query}
+            onChange={(e) => handleInputChange(e.target.value)}
+            className="w-full pl-12 pr-4 py-4 text-lg bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
+          />
+          {isSearching && (
+            <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-400"></div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            <svg
+              className="w-5 h-5 text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className="text-red-400">{error}</p>
+          </div>
+        </div>
+      )}
 
       {/* Results */}
       {results.length > 0 && (
@@ -145,11 +277,21 @@ function SearchAnime({ onAdd }) {
                         >
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
-                        {anime.score || "?"}/10
+                        {anime.score ? `${anime.score}/10` : "N/A"}
                       </span>
                       <span className="px-2 py-1 bg-gray-600/50 rounded-full text-xs">
                         {anime.type || "TV"}
                       </span>
+                      {anime.members && (
+                        <span className="text-xs text-gray-500">
+                          {anime.members.toLocaleString()} members
+                        </span>
+                      )}
+                      {anime.status && (
+                        <span className="px-2 py-1 bg-blue-600/50 rounded-full text-xs">
+                          {anime.status}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -210,31 +352,35 @@ function SearchAnime({ onAdd }) {
       )}
 
       {/* Empty State */}
-      {query && !isSearching && results.length === 0 && (
-        <div className="text-center py-12">
-          <div className="w-24 h-24 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
-            <svg
-              className="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+      {(query || (useFilters && filters.query)) &&
+        !isSearching &&
+        results.length === 0 &&
+        !error && (
+          <div className="text-center py-12">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
+              <svg
+                className="w-12 h-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">
+              No anime found
+            </h3>
+            <p className="text-gray-400">
+              Try searching for a different anime title or adjusting your
+              filters
+            </p>
           </div>
-          <h3 className="text-xl font-semibold text-gray-300 mb-2">
-            No anime found
-          </h3>
-          <p className="text-gray-400">
-            Try searching for a different anime title
-          </p>
-        </div>
-      )}
+        )}
     </div>
   );
 }

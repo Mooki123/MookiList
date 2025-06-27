@@ -53,16 +53,20 @@ function AnimeDetails() {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!commentInput.trim()) return;
+
     try {
       const res = await axios.post(
         `/comments/${id}`,
         { content: commentInput },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      setComments([res.data, ...comments]);
+      setComments([...comments, res.data]);
       setCommentInput("");
-      toast.success("Comment added!");
-    } catch {
+      toast.success("Comment added successfully!");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
       toast.error("Failed to add comment");
     }
   };
@@ -78,40 +82,44 @@ function AnimeDetails() {
           status: "plan to watch",
           score: 0,
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      toast.success("Added to watchlist!");
-    } catch (err) {
-      console.error("Add failed:", err);
-      toast.error("Failed to add to watchlist");
+      toast.success("Anime added to watchlist!");
+    } catch (error) {
+      console.error("Failed to add anime:", error);
+      toast.error("Failed to add anime to watchlist");
     }
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      "Currently Airing": "bg-green-500",
-      "Finished Airing": "bg-blue-500",
-      "Not yet aired": "bg-yellow-500",
-      "On Hiatus": "bg-orange-500",
-    };
-    return colors[status] || "bg-gray-500";
+    switch (status?.toLowerCase()) {
+      case "currently airing":
+        return "bg-[#00BCD4]";
+      case "finished airing":
+        return "bg-[#66BB6A]";
+      case "not yet aired":
+        return "bg-[#7C4DFF]";
+      default:
+        return "bg-[#90A4AE]";
+    }
   };
 
   const getRatingColor = (rating) => {
-    if (rating >= 8) return "text-green-400";
-    if (rating >= 7) return "text-yellow-400";
-    if (rating >= 6) return "text-orange-400";
-    return "text-red-400";
+    if (rating >= 8) return "text-[#66BB6A]";
+    if (rating >= 7) return "text-[#FFC107]";
+    if (rating >= 6) return "text-[#FF9800]";
+    return "text-[#F44336]";
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-400 mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Loading anime details...
-          </h2>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#FFC107] mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-[#E0E0E0] mb-2">Loading...</h2>
+          <p className="text-[#90A4AE]">Fetching anime details</p>
         </div>
       </div>
     );
@@ -119,14 +127,14 @@ function AnimeDetails() {
 
   if (!anime) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[#E0E0E0] mb-4">
             Anime not found
           </h2>
           <Link
             to="/search"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-xl transition-all duration-300"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] hover:from-[#FFD600] hover:to-[#FFA000] text-[#1E1E1E] font-semibold rounded-xl transition-all duration-300"
           >
             Back to Search
           </Link>
@@ -136,7 +144,7 @@ function AnimeDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
+    <div className="min-h-screen bg-[#121212]">
       {/* Hero Section */}
       <div className="relative h-96 md:h-[500px] overflow-hidden">
         {/* Background Image */}
@@ -146,7 +154,7 @@ function AnimeDetails() {
             backgroundImage: `url(${anime.images.jpg.large_image_url})`,
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent"></div>
         </div>
 
         {/* Content Overlay */}
@@ -172,22 +180,22 @@ function AnimeDetails() {
                   >
                     {anime.status}
                   </span>
-                  <span className="px-3 py-1 bg-purple-500 rounded-full text-xs font-semibold">
+                  <span className="px-3 py-1 bg-[#7C4DFF] rounded-full text-xs font-semibold">
                     {anime.type}
                   </span>
                   {anime.episodes && (
-                    <span className="px-3 py-1 bg-blue-500 rounded-full text-xs font-semibold">
+                    <span className="px-3 py-1 bg-[#2979FF] rounded-full text-xs font-semibold">
                       {anime.episodes} Episodes
                     </span>
                   )}
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight text-[#E0E0E0]">
                   {anime.title}
                 </h1>
 
                 {anime.title_english && anime.title_english !== anime.title && (
-                  <p className="text-xl text-gray-300 mb-4">
+                  <p className="text-xl text-[#B0BEC5] mb-4">
                     {anime.title_english}
                   </p>
                 )}
@@ -196,7 +204,7 @@ function AnimeDetails() {
                   {anime.score && (
                     <div className="flex items-center gap-2">
                       <svg
-                        className="w-5 h-5 text-yellow-400"
+                        className="w-5 h-5 text-[#FFC107]"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -212,7 +220,7 @@ function AnimeDetails() {
                     </div>
                   )}
                   {anime.scored_by && (
-                    <span className="text-gray-300">
+                    <span className="text-[#B0BEC5]">
                       {anime.scored_by.toLocaleString()} votes
                     </span>
                   )}
@@ -222,7 +230,7 @@ function AnimeDetails() {
                 <div className="flex flex-wrap gap-4">
                   <button
                     onClick={handleAddToList}
-                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] hover:from-[#FFD600] hover:to-[#FFA000] text-[#1E1E1E] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                   >
                     <svg
                       className="w-5 h-5 mr-2"
@@ -243,7 +251,7 @@ function AnimeDetails() {
                   {anime.trailer?.url && (
                     <button
                       onClick={() => setShowTrailer(true)}
-                      className="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                      className="inline-flex items-center px-6 py-3 bg-[#F44336] hover:bg-[#D32F2F] text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                     >
                       <svg
                         className="w-5 h-5 mr-2"
@@ -264,7 +272,7 @@ function AnimeDetails() {
 
                   <Link
                     to={`/search?q=${encodeURIComponent(anime.title)}`}
-                    className="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+                    className="inline-flex items-center px-6 py-3 bg-[#303030] hover:bg-[#404040] text-[#E0E0E0] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
                   >
                     <svg
                       className="w-5 h-5 mr-2"
@@ -294,10 +302,10 @@ function AnimeDetails() {
           {/* Left Column - Synopsis and Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Synopsis */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-4 flex items-center">
                 <svg
-                  className="w-6 h-6 mr-3 text-purple-400"
+                  className="w-6 h-6 mr-3 text-[#FFC107]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -311,16 +319,16 @@ function AnimeDetails() {
                 </svg>
                 Synopsis
               </h2>
-              <p className="text-gray-300 leading-relaxed text-lg">
+              <p className="text-[#B0BEC5] leading-relaxed text-lg">
                 {anime.synopsis || "No synopsis available."}
               </p>
             </div>
 
             {/* Additional Details */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center">
                 <svg
-                  className="w-6 h-6 mr-3 text-purple-400"
+                  className="w-6 h-6 mr-3 text-[#FFC107]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -338,10 +346,10 @@ function AnimeDetails() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {anime.aired?.from && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Aired
                     </h3>
-                    <p className="text-white">
+                    <p className="text-[#E0E0E0]">
                       {new Date(anime.aired.from).toLocaleDateString()}
                     </p>
                   </div>
@@ -349,37 +357,37 @@ function AnimeDetails() {
 
                 {anime.duration && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Duration
                     </h3>
-                    <p className="text-white">{anime.duration}</p>
+                    <p className="text-[#E0E0E0]">{anime.duration}</p>
                   </div>
                 )}
 
                 {anime.rating && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Rating
                     </h3>
-                    <p className="text-white">{anime.rating}</p>
+                    <p className="text-[#E0E0E0]">{anime.rating}</p>
                   </div>
                 )}
 
                 {anime.source && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Source
                     </h3>
-                    <p className="text-white">{anime.source}</p>
+                    <p className="text-[#E0E0E0]">{anime.source}</p>
                   </div>
                 )}
 
                 {anime.season && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Season
                     </h3>
-                    <p className="text-white">
+                    <p className="text-[#E0E0E0]">
                       {anime.season} {anime.year}
                     </p>
                   </div>
@@ -387,10 +395,10 @@ function AnimeDetails() {
 
                 {anime.broadcast?.string && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <h3 className="text-sm font-semibold text-[#90A4AE] uppercase tracking-wide mb-2">
                       Broadcast
                     </h3>
-                    <p className="text-white">{anime.broadcast.string}</p>
+                    <p className="text-[#E0E0E0]">{anime.broadcast.string}</p>
                   </div>
                 )}
               </div>
@@ -398,10 +406,10 @@ function AnimeDetails() {
 
             {/* Genres */}
             {anime.genres && anime.genres.length > 0 && (
-              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+              <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+                <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center">
                   <svg
-                    className="w-6 h-6 mr-3 text-purple-400"
+                    className="w-6 h-6 mr-3 text-[#FFC107]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -419,7 +427,7 @@ function AnimeDetails() {
                   {anime.genres.map((genre) => (
                     <span
                       key={genre.mal_id}
-                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
+                      className="px-4 py-2 bg-gradient-to-r from-[#FFC107] to-[#FFD600] text-[#1E1E1E] text-sm font-semibold rounded-full hover:from-[#FFD600] hover:to-[#FFA000] transition-all duration-300 transform hover:scale-105"
                     >
                       {genre.name}
                     </span>
@@ -429,10 +437,10 @@ function AnimeDetails() {
             )}
 
             {/* Comments Section */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center">
                 <svg
-                  className="w-6 h-6 mr-3 text-purple-400"
+                  className="w-6 h-6 mr-3 text-[#FFC107]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -455,13 +463,13 @@ function AnimeDetails() {
                       value={commentInput}
                       onChange={(e) => setCommentInput(e.target.value)}
                       placeholder="Share your thoughts about this anime..."
-                      className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                      className="flex-1 bg-[#303030]/50 border border-[#404040]/50 rounded-xl p-3 text-[#E0E0E0] placeholder-[#90A4AE] focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:border-transparent resize-none"
                       rows="3"
                     />
                     <button
                       type="submit"
                       disabled={!commentInput.trim()}
-                      className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                      className="px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FFD600] hover:from-[#FFD600] hover:to-[#FFA000] text-[#1E1E1E] rounded-xl font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
                       Post
                     </button>
@@ -473,30 +481,30 @@ function AnimeDetails() {
               <div className="space-y-4">
                 {commentsLoading ? (
                   <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Loading comments...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFC107] mx-auto"></div>
+                    <p className="text-[#90A4AE] mt-2">Loading comments...</p>
                   </div>
                 ) : comments.length > 0 ? (
                   comments.map((comment) => (
                     <div
                       key={comment._id}
-                      className="bg-gray-700/30 backdrop-blur-sm border border-gray-600/30 rounded-xl p-4"
+                      className="bg-[#303030]/30 backdrop-blur-sm border border-[#404040]/30 rounded-xl p-4"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                        <div className="w-10 h-10 bg-gradient-to-r from-[#FFC107] to-[#FFD600] rounded-full flex items-center justify-center text-[#1E1E1E] font-semibold text-sm flex-shrink-0">
                           {comment.user?.username?.charAt(0).toUpperCase() ||
                             "U"}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-white">
+                            <span className="font-semibold text-[#E0E0E0]">
                               {comment.user?.username || "Unknown User"}
                             </span>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-[#90A4AE]">
                               {new Date(comment.createdAt).toLocaleDateString()}
                             </span>
                           </div>
-                          <p className="text-gray-300 leading-relaxed">
+                          <p className="text-[#B0BEC5] leading-relaxed">
                             {comment.content}
                           </p>
                         </div>
@@ -505,9 +513,9 @@ function AnimeDetails() {
                   ))
                 ) : (
                   <div className="text-center py-8">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-[#303030]/50 rounded-full flex items-center justify-center">
                       <svg
-                        className="w-8 h-8 text-gray-400"
+                        className="w-8 h-8 text-[#90A4AE]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -520,10 +528,10 @@ function AnimeDetails() {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-300 mb-2">
+                    <h3 className="text-lg font-semibold text-[#B0BEC5] mb-2">
                       No comments yet
                     </h3>
-                    <p className="text-gray-400">
+                    <p className="text-[#90A4AE]">
                       {token
                         ? "Be the first to share your thoughts!"
                         : "Sign in to leave a comment"}
@@ -537,10 +545,10 @@ function AnimeDetails() {
           {/* Right Column - Stats and Links */}
           <div className="space-y-8">
             {/* Statistics */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center">
                 <svg
-                  className="w-6 h-6 mr-3 text-purple-400"
+                  className="w-6 h-6 mr-3 text-[#FFC107]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -558,8 +566,8 @@ function AnimeDetails() {
               <div className="space-y-4">
                 {anime.rank && (
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Rank</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-[#B0BEC5]">Rank</span>
+                    <span className="text-[#E0E0E0] font-semibold">
                       #{anime.rank}
                     </span>
                   </div>
@@ -567,8 +575,8 @@ function AnimeDetails() {
 
                 {anime.popularity && (
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Popularity</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-[#B0BEC5]">Popularity</span>
+                    <span className="text-[#E0E0E0] font-semibold">
                       #{anime.popularity}
                     </span>
                   </div>
@@ -576,8 +584,8 @@ function AnimeDetails() {
 
                 {anime.members && (
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Members</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-[#B0BEC5]">Members</span>
+                    <span className="text-[#E0E0E0] font-semibold">
                       {anime.members.toLocaleString()}
                     </span>
                   </div>
@@ -585,8 +593,8 @@ function AnimeDetails() {
 
                 {anime.favorites && (
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Favorites</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-[#B0BEC5]">Favorites</span>
+                    <span className="text-[#E0E0E0] font-semibold">
                       {anime.favorites.toLocaleString()}
                     </span>
                   </div>
@@ -595,10 +603,10 @@ function AnimeDetails() {
             </div>
 
             {/* External Links */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-[#1E1E1E]/50 backdrop-blur-sm border border-[#303030]/50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center">
                 <svg
-                  className="w-6 h-6 mr-3 text-purple-400"
+                  className="w-6 h-6 mr-3 text-[#FFC107]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -618,7 +626,7 @@ function AnimeDetails() {
                   href={anime.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-300"
+                  className="flex items-center justify-between w-full px-4 py-3 bg-[#2979FF] hover:bg-[#1565C0] text-white rounded-lg transition-colors duration-300"
                 >
                   <span>MyAnimeList</span>
                   <svg
@@ -639,7 +647,7 @@ function AnimeDetails() {
                 {anime.trailer?.url && (
                   <button
                     onClick={() => setShowTrailer(true)}
-                    className="flex items-center justify-between w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-300"
+                    className="flex items-center justify-between w-full px-4 py-3 bg-[#F44336] hover:bg-[#D32F2F] text-white rounded-lg transition-colors duration-300"
                   >
                     <span>Watch Trailer</span>
                     <svg
@@ -669,7 +677,7 @@ function AnimeDetails() {
           <div className="relative w-full max-w-4xl">
             <button
               onClick={() => setShowTrailer(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors duration-300"
+              className="absolute -top-12 right-0 text-white hover:text-[#B0BEC5] transition-colors duration-300"
             >
               <svg
                 className="w-8 h-8"

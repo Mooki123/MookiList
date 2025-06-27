@@ -68,13 +68,13 @@ function Watchlist() {
       case "watching":
         return "bg-[#00BCD4]";
       case "completed":
-        return "bg-[#66BB6A]";
+        return "bg-[#4CAF50]";
       case "dropped":
-        return "bg-[#9575CD]";
+        return "bg-[#9C27B0]";
       case "plan to watch":
-        return "bg-[#7C4DFF]";
+        return "bg-[#673AB7]";
       default:
-        return "bg-[#90A4AE]";
+        return "bg-[#607D8B]";
     }
   };
 
@@ -394,7 +394,7 @@ function Watchlist() {
                         />
                         <div className="absolute top-2 right-2">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium text-[#B0BEC5] ${getStatusColor(
+                            className={`px-2 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(
                               anime.status
                             )}`}
                           >
